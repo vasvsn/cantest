@@ -1,0 +1,23 @@
+<div class="form">
+    <div class="peerlogo">
+        <img class="img-responsive" src="./assets/img/icons/fontys_logo.gif" width="100"/>
+    </div>
+    <div>
+        <form ng-submit="login()" role="form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="email" class="form-control" id="username" ng-model="user.username" required/>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" ng-model="user.password" />
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+    </div>
+    <br />
+     <div class="alert alert-danger collapse alert-dismissable" >
+         <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+        {{ error }}
+    </div>
+</div>

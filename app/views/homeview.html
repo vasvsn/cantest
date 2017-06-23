@@ -1,0 +1,26 @@
+<div class="row">
+    <header ng-include="'app/common/header.html'"></header>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <h3 class="">Team Members </h3>
+        </div>
+        <div ng-repeat="(key, student)  in students" class="col-lg-2 col-md-3 col-sm-3 col-xs-6 thumb">
+            <div id="{{ student.studentID }}" ng-click="showGrading(student.studentName, student.studentID)" class="col-card">
+
+                <div ng-if="student.notifications > 0">
+                    <div class="notif">{{ student.notifications }}</div>
+                </div>
+                 
+                <div id="avatar">
+                    <img class="img-responsive" ng-src=".{{ student.studentImageUrl }}" />
+                </div>
+                <div class="desc">
+                    <h4><b>{{ student.studentName}}</b></h4>
+                    <p>{{ student.studentStudy }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

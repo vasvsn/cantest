@@ -1,0 +1,103 @@
+<div class="row">
+    <header ng-include="'app/common/header.html'"></header>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <h3>Grades</h3>
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th>Goal</th>
+                        <th>Goal Type</th>
+                        <th class="text-center">Total Facts</th>
+                        <th class="text-center">Latest Grade</th>
+                        <th class="text-center">Grade (%)</th>
+                        <th>Competence</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td class="text-center"><strong>{{ totals.factSum }}</strong></td>
+                        <td class="text-center"><strong>{{ (totals.gradeSum / grades.length) | number: 2 }}</strong></td>
+                        <td class="text-center"><strong>{{ (totals.percentageSum / grades.length) | number: 2 }} %</strong></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    <tr ng-repeat="(key, grade) in grades">
+                        <td><span><img class="" ng-src="{{ setIcon(grade.shortText) }}" width="20"/></span>&nbsp;{{ grade.shortText }}</td>
+                        <td>{{ grade.type }}</td>
+                        <td class="text-center">{{ grade.factCount }}</td>
+                        <td class="text-center">{{ grade.grade }}</td>
+                        <td class="text-center">{{ grade.grade * 10 }}</td>
+                        <td ng-if="grade.grade <= 2.5" class="text-danger">Wrong Intuition</td>
+                        <td ng-if="grade.grade > 2.5 && grade.grade <= 5" class="text-warning">Wrong Analysis</td>
+                        <td ng-if="grade.grade > 5 && grade.grade <= 7.5" class="text-success">Right Analysis</td>
+                        <td ng-if="grade.grade > 7.5" class="text-primary">Right Intuition</td>
+
+                    </tr>
+                </tbody>
+            </table>
+            <div class="row">
+              <div class="col-xs-3">
+                <label for="ex1">Filter</label>
+                <select class="form-control required" id="week" ng-model="weeknr" ng-change="getWeekly()"
+                          ng-options="item.weekNr as 'Week ' + item.weekNr for item in weeks">
+                    <option value="">None</option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-5">
+                <table class="table table-condensed" ng-if="weeklyGrades.length > 0">
+                    <thead>
+                        <tr>
+                            <th>Goal</th>
+                            <th>Week</th>
+                            <th>Grade</th>
+                            <th>Average</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="(key, weekly) in weeklyGrades">
+                            <td><span><img class="" ng-src="{{ setIcon(weekly.shortText) }}" width="20"/></span>&nbsp;{{ weekly.shortText }}</td>
+                            <td>Week {{ weekly.weekNr}}</td>
+                            <td>{{ weekly.grade }}</td>
+                            <td ng-if="weekly.average && weekly.average >= 0 " class="text-success">+{{ weekly.average }} <i class="glyphicon glyphicon-triangle-top"></i></td>
+                            <td ng-if="weekly.average < 0 " class="text-danger">{{ weekly.average }} <i class="glyphicon glyphicon-triangle-bottom"></i></td>
+                            <td ng-if="!weekly.average" >-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-lg-7">
+              <table class="table table-condensed" ng-if="weeklyGrades.length > 0">
+                  <thead>
+                      <tr>
+                          <th>Fact description</th>
+                          <th>Goal</th>
+                          <th>Average</th>
+                          <th>Assessments</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr  ng-repeat="fact in weeklyFacts | filter:{ week: weeknr, status: 'Normalized'}">
+                        <td>{{ fact.description | limitTo : 30}} ...</td>
+                        <td>{{ fact.shortText }}</td>
+                        <td>{{ fact.avgGrade }}</td>
+                        <td>
+                            <span ng-repeat="assessor in fact.studentGrades">
+                                <span id="{{ setGrade(assessor.grade) }}" class="grade">{{ assessor.grade }}</span>
+                            </span>
+                        </td>
+                      </tr>
+                  </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>

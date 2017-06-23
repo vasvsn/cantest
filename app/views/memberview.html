@@ -1,0 +1,139 @@
+<div class="row">
+    <header ng-include="'app/common/header.html'"></header>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <h3>{{ name }}</h3>
+            <p class="pull-left lead color-purple">Ungraded Facts <div id="opened" class="notification">{{ facts.length}}</div></p>
+            <!--<span class="pull-right"><i class="glyphicon glyphicon-th-large" />&nbsp;<i class="glyphicon glyphicon-th-list" /></span>-->
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <!--<th>Fact Id.</th>-->
+                        <th>Fact Description</th>
+                        <th>Week No.</th>
+                        <th>Previous Grade</th>
+                        <th>Learning Goal</th>
+                        <th>Frameworks</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr  ng-repeat="(key, fact)  in facts" ng-click="showFact(fact)">
+                        <!-- <td>{{ fact.factId }}</td> -->
+                        <td><a>{{ fact.description | limitTo : 30 }} ...</a></td>
+                        <td>{{ fact.weekNumber }}</td>
+                        <td class="text-center">{{ fact.lastGrade }}</td>
+                        <td>{{ fact.learningGoal }}</td>
+                        <td>
+                            <span ng-repeat="framework in fact.frameworks">
+                                <span class="">
+                                    <i class="{{ framework.toLowerCase() }}-icon {{ formateIcon(framework) }}"/>
+                                </span>
+                            </span>
+                        </td>
+                        <td class="{{ formateText(fact.status) }}">{{ fact.status }}</td>
+                        <td><button data-toggle="modal" class="btn btn-primary btn-xs" data-id="{{ facts[key] }}" class="open-GradeFact">Grade&nbsp;<i class="glyphicon glyphicon-pencil"></i></button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <br/>
+            <p class="pull-left lead color-purple">Graded Facts <div id="closed" class="notification">{{ gradedfacts.length}}</div></p>
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <!-- <th>Fact Id.</th> -->
+                        <th>Fact Description</th>
+                        <th>Week No.</th>
+                        <th>Previous Grade</th>
+                        <th>Learning Goal</th>
+                        <th>Frameworks</th>
+                        <th>Status</th>
+                        <th>Assessments</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr  ng-repeat="(key, fact)  in gradedfacts">
+                        <!-- <td>{{ fact.factId }}</td> -->
+                        <td><a href="#">{{ fact.description | limitTo : 30}} ...</a></td>
+                        <td>{{ fact.weekNumber }}</td>
+                        <td class="text-center">{{ fact.lastGrade }}</td>
+                        <td>{{ fact.learningGoal }}</td>
+                        <td>
+                            <span ng-repeat="framework in fact.frameworks">
+                                <span class="">
+                                    <i class="{{ framework.toLowerCase() }}-icon {{ formateIcon(framework) }}"/>
+                                </span>
+                            </span>
+                        </td>
+                        <td class="{{ formateText(fact.status) }}">{{ fact.status }}</td>
+                        <td>
+                            <span ng-repeat="assessor in fact.studentGrades">
+                                <img class="img-circle" ng-src=".{{ assessor.studentImageUrl }}" height="25"/>
+                            <span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="myModal" class="modal fade" role="dialog" >
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <p class=" modal-title lead color-purple">{{ fact.description }}</p>
+                </div>
+                <div class="modal-body">
+                    <form id="gradeFrm">
+                        <dl>
+                            <dt>Description</dt>
+                              <dd>{{ fact.description }}</dd>
+                            <dt>Week No.</dt>
+                              <dd>{{ fact.weekNumber }}</dd>
+                            <dt>Previous Grade</dt>
+                              <dd>{{ fact.lastGrade }}</dd>
+                            <dt>Learning Goal</dt>
+                              <dd>{{ fact.learningGoal }}</dd>
+                            <dt>Frameworks</dt>
+                            <dd>
+                                <span ng-repeat="framework in fact.frameworks">
+                                    <i class="{{ framework.toLowerCase() }}-icon {{ formateIcon(framework) }}"/> &nbsp;
+                                </span>
+                            </dd>
+                            <dt>Hash Tags</dt>
+                            <dd>
+                                <span ng-repeat="hashtag in fact.hashTags">
+                                    <span class="hashtag">{{ hashtag }}</span>
+                                </span>
+                            </dd>
+                            <dt>Status</dt>
+                              <dd class="{{ formateText(fact.status) }}">{{ fact.status }}</dd>
+                            <dt>Assessments</dt>
+                              <dd ng-if="fact.lastGrade < 10" >
+                                  <input type="radio" name="grade" value="2"/> Great😎 &nbsp;
+                                  <input type="radio" name="grade" value="1"/> Good😊 &nbsp;
+                                  <input type="radio" name="grade" value="0"/> Ok😌 &nbsp;
+                                  <input type="radio" name="grade" value="-1"/> Bad😕 &nbsp;
+                              </dd>
+                              <dd ng-if="fact.lastGrade >= 10">
+                                  <input type="radio" name="grade" value="0"/> Good😊 &nbsp;
+                                  <input type="radio" name="grade" value="-1"/> Bad😕 &nbsp;
+                              </dd>
+                            <dt>Comments</dt>
+                            <dd>
+                                <input type="text" class="form-control" name="comment" id="comment"/>
+                            </dd>
+                        </dl>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="gradeBtn" type="button" class="btn btn-default" ng-click="submitGrade(fact)"  disabled>Grade</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
